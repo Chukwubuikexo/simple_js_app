@@ -5,19 +5,22 @@ ENV MONGO_DB_USERNAME=admin \
     MONGO_DB_PWD=password
 
 # Create application directory within the container's filesystem
-RUN mkdir -p /home/benedict/simple_js_app/my_app/package.json
+RUN mkdir -p /home/simple_js_app
 
-# Copy your local application code from your working directory into the container's filesystem
-COPY . /home/benedict/simple_js_app/my_app/package.json
+# Copy package.json and package-lock.json to the container first for efficient caching
+COPY my_app/package*.json /home/simple_js_app/
 
-# Set the working directory inside the container
-WORKDIR /home/benedict/simple_js_app/my_app/package.json
+# Set the working directory
+WORKDIR /home/simple_js_app
 
-# Install dependencies within the container
+# Install dependencies
 RUN npm install
 
-# Expose the port the app runs on (optional, only if needed for external access)
+# Copy the rest of the application files to the container
+COPY my_app/ /home/simple_js_app
+
+# Expose the port if needed
 EXPOSE 3000
 
-# Start the app with node
+# Start the application
 CMD ["node", "server.js"]
