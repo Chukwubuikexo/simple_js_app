@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: my-app
+  labels:
+    app: my-app
+spec:
+   replicas: 1
+   selector: 
+     matchLabels:
+       app: my-app
+   template:
+      metadata:
+        labels:
+          app: my-app
+      spec:  
+        imagePullSecrets:
+        - name: my-registry-key
+        containers:
+        - name: my-app
+          image: 53669.dkr.ecr.eu-north-1.amazonaws.com/simple-js-app-repo:1.2
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 3000
+#image address is wrong
